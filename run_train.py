@@ -115,7 +115,7 @@ def iterate_xgb(job_info, job_runner, iterations=10, k_lim=21):
 
 
 def main():
-  tickers, periods, targets = util.parse_command_line(default_periods=['day'],
+  tickers, periods, targets = util.parse_command_line(default_periods=['5m'],
                                                       default_targets=['high'])
   while True:
     for ticker in tickers:
@@ -123,11 +123,11 @@ def main():
         for target in targets:
           job_info = JobInfo('_data', '_zoo', name='%s_%s' % (ticker, period), target=target)
           job_runner = JobRunner(job_info, limit=np.median)
-          iterate_linear(job_info, job_runner)
+          # iterate_linear(job_info, job_runner)
           iterate_neural(job_info, job_runner)
-          iterate_xgb(job_info, job_runner)
-          iterate_rnn(job_info, job_runner)
-          iterate_cnn(job_info, job_runner)
+          # iterate_xgb(job_info, job_runner)
+          # iterate_rnn(job_info, job_runner)
+          # iterate_cnn(job_info, job_runner)
           job_runner.print_result()
 
 

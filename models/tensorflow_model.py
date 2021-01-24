@@ -44,9 +44,9 @@ class TensorflowModel(Model):
 
   def session(self):
     assert self._graph is not None
-    config = tf.ConfigProto(device_count={'GPU': 0}) if self._cpu_only else tf.ConfigProto()
+    config = tf.compat.v1.ConfigProto(device_count={'GPU': 0}) if self._cpu_only else tf.compat.v1.ConfigProto()
     config.gpu_options.allow_growth = True  # https://github.com/vijayvee/Recursive-neural-networks-TensorFlow/issues/1
-    self._session = tf.Session(graph=self._graph, config=config)
+    self._session = tf.compat.v1.Session(graph=self._graph, config=config)
     return self._session
 
 
@@ -69,11 +69,11 @@ class TensorflowModel(Model):
 
   def save(self, dest_dir):
     path = os.path.join(dest_dir, 'session.data')
-    saver = tf.train.Saver()
+    saver = tf.compat.v1.train.Saver()
     saver.save(self._session, path)
 
 
   def restore(self, source_dir):
     path = os.path.join(source_dir, 'session.data')
-    saver = tf.train.Saver()
+    saver = tf.compat.v1.train.Saver()
     saver.restore(self._session, path)

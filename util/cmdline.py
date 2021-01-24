@@ -9,8 +9,8 @@ import sys
 from .logging import debug, info, warn
 
 
-DEFAULT_TICKERS = ['BTC_ETH', 'BTC_LTC', 'BTC_XRP', 'BTC_ZEC']
-DEFAULT_PERIODS = ['day']
+DEFAULT_TICKERS = ['BTC_USDT']
+DEFAULT_PERIODS = ['5m']
 DEFAULT_TARGETS = ['high']
 
 

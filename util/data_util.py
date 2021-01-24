@@ -24,14 +24,14 @@ def to_changes(raw):
     raw.date = pd.to_datetime(raw.date * 1000, unit='ms')
   return pd.DataFrame({
     'date': raw.date,
-    'time': raw.date.astype(datetime.datetime).apply(lambda val: seconds(val) / (60*60*24)),
+    'time': raw.date.apply(lambda val: seconds(val) / (60*60*24)),
     'high': raw.high.pct_change(),
     'low': raw.low.pct_change(),
     'open': raw.open.pct_change(),
     'close': raw.close.pct_change(),
     'vol': raw.volume.replace({0: 1e-5}).pct_change(),
-    'avg': raw.weightedAverage.pct_change(),
-  }, columns=['date', 'time', 'high', 'low', 'open', 'close', 'vol', 'avg'])
+    # 'avg': raw.weightedAverage.pct_change(),
+  }, columns=['date', 'time', 'high', 'low', 'open', 'close', 'vol'])
 
 
 def seconds(datetime_):
@@ -39,6 +39,7 @@ def seconds(datetime_):
 
 
 def to_dataset(df, k, target_column, with_bias):
+  df = df[1:int(len(df) / 10)]
   df = df[1:].reset_index(drop=True)
   df = df.drop(['date'], axis=1)
   target = df[target_column]
@@ -51,7 +52,7 @@ def to_dataset(df, k, target_column, with_bias):
 
   for i in range(windows_num):
     window = df[i:i+k]
-    row = window.as_matrix().reshape((-1,))
+    row = window.values.reshape((-1,))
     if with_bias:
       row = np.insert(row, 0, 1)
     x[i] = row
